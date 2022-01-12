@@ -24,17 +24,29 @@ function Post() {
 
 	const addComment = async () => {
 		axios
-			.post('http://localhost:3001/comments', {
-				commentBody: newComment,
-				PostId: id
-			})
-			.then(() => {
-				setNewComment("");
-				axios
-					.get(`http://localhost:3001/comments/${id}`)
-					.then((response) => {
-						setComments(response.data);
-					});
+			.post(
+				'http://localhost:3001/comments',
+				{
+					commentBody: newComment,
+					PostId: id
+				},
+				{
+					headers: {
+						accessToken: sessionStorage.getItem('accessToken')
+					}
+				}
+			)
+			.then((response) => {
+				if (response.data.error) {
+					alert(response.data.error.message);
+				} else {
+					setNewComment('');
+					axios
+						.get(`http://localhost:3001/comments/${id}`)
+						.then((response) => {
+							setComments(response.data);
+						});
+				}
 			});
 	};
 

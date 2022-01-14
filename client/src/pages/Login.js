@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../helpers/AuthContext";
 
 function Login() {
 	const [userName, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+
+	const { setAuthState } = useContext(AuthContext);
 
 	let navigate = useNavigate();
 
@@ -16,7 +19,8 @@ function Login() {
 				if (response.data.error) {
 					alert(response.data.error);
 				} else {
-					sessionStorage.setItem('accessToken', response.data);
+					localStorage.setItem('accessToken', response.data);
+					setAuthState(true);
 					navigate("/");
 				}
 			});
@@ -29,8 +33,7 @@ function Login() {
 				onChange={(event) => {
 					setUsername(event.target.value);
 				}}
-				value={userName}
-				autoComplete={false}
+				value={userName}				
 			/>
 			<label>Password:</label>
 			<input
@@ -38,8 +41,7 @@ function Login() {
 				onChange={(event) => {
 					setPassword(event.target.value);
 				}}
-				value={password}
-				autoComplete={false}
+				value={password}				
 			/>
 
 			<button onClick={login}> Login </button>

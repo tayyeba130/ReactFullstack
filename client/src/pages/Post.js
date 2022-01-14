@@ -32,7 +32,7 @@ function Post() {
 				},
 				{
 					headers: {
-						accessToken: sessionStorage.getItem('accessToken')
+						accessToken: localStorage.getItem('accessToken')
 					}
 				}
 			)
@@ -77,6 +77,7 @@ function Post() {
 						return (
 							<div className="comment" key={comment.id}>
 								{comment.commentBody}
+								<label>Username: {comment.userName}</label>
 							</div>
 						);
 					})}
